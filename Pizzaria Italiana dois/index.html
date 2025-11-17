@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Bella Pizza - Autêntica Pizza Italiana</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    
+    <!-- Header CORRIGIDO -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-pizza-slice"></i>
+                </div>
+                <h1>La Bella Pizza</h1>
+            </div>
+        </div>
+        <div class="header-bottom">
+            <div class="container">
+                <div class="header-content">
+                    <nav>
+                        <ul>
+                            <li><a href="#inicio" class="nav-btn"><span>Início</span></a></li>
+                            <li><a href="#cardapio" class="nav-btn"><span>Cardápio</span></a></li>
+                            <li><a href="#promocoes" class="nav-btn"><span>Promoções</span></a></li>
+                            <li><a href="#sobre" class="nav-btn"><span>Sobre</span></a></li>
+                            <li><a href="#contato" class="nav-btn"><span>Contato</span></a></li>
+                            <li>
+                                <div class="cart-icon" id="cartIcon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span class="cart-count" id="cartCount">0</span>
+                                </div>
+                            </li>
+                            <!-- BOTÃO ENTRAR NA DIREITA -->
+                            <li class="auth-li">
+                                <div class="user-actions">
+                                    <button class="login-btn" id="loginBtn">
+                                        <i class="fas fa-user"></i> Entrar
+                                    </button>
+                                    <div class="user-menu" id="userMenu" style="display: none;">
+                                        <span id="userName">Usuário</span>
+                                        <button id="logoutBtn">Sair</button>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Modal de Login/Cadastro -->
+    <div class="modal" id="authModal">
+        <div class="modal-content auth-modal">
+            <button class="close-modal" id="closeAuthModal">&times;</button>
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Entrar</button>
+                    <button class="auth-tab" data-tab="register">Cadastrar</button>
+                </div>
+                
+                <!-- Formulário de Login -->
+                <form class="auth-form active" id="loginForm">
+                    <h3>Bem-vindo de volta!</h3>
+                    <div class="form-group">
+                        <label for="loginEmail">E-mail</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="auth-submit-btn">Entrar</button>
+                    <p class="auth-switch">Não tem conta? <a href="#" class="switch-to-register">Cadastre-se</a></p>
+                </form>
+
+                <!-- Formulário de Cadastro -->
+                <form class="auth-form" id="registerForm">
+                    <h3>Crie sua conta</h3>
+                    <div class="form-group">
+                        <label for="registerName">Nome completo</label>
+                        <input type="text" id="registerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">E-mail</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPhone">Telefone</label>
+                        <input type="tel" id="registerPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerAddress">Endereço completo</label>
+                        <textarea id="registerAddress" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Senha</label>
+                        <input type="password" id="registerPassword" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Confirmar senha</label>
+                        <input type="password" id="registerConfirmPassword" required>
+                    </div>
+                    <button type="submit" class="auth-submit-btn">Cadastrar</button>
+                    <p class="auth-switch">Já tem conta? <a href="#" class="switch-to-login">Faça login</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Aviso de Login -->
+    <div class="modal" id="loginRequiredModal">
+        <div class="modal-content login-required-modal">
+            <div class="login-required-content">
+                <div class="login-required-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Cadastro Necessário</h3>
+                <p>Para fazer pedidos e acessar todas as funcionalidades, você precisa estar cadastrado.</p>
+                <div class="login-required-actions">
+                    <button class="login-required-btn primary" id="goToLoginBtn">Fazer Cadastro/Login</button>
+                    <button class="login-required-btn secondary" id="continueBrowsingBtn">Continuar Navegando</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carrinho de Compras -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3 class="cart-title">Seu Carrinho</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Itens do carrinho serão adicionados aqui dinamicamente -->
+        </div>
+        <div class="cart-total" id="cartTotal">Total: R$ 0,00</div>
+        <button class="checkout-btn" id="checkoutBtn">Finalizar Pedido</button>
+        <button class="whatsapp-btn" id="whatsappBtn">
+            <i class="fab fa-whatsapp"></i> Pedir pelo WhatsApp
+        </button>
+    </div>
+
+    <!-- Modal de Produto -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            <div class="modal-body">
+                <div class="modal-image">
+                    <img id="modalImage" src="" alt="Pizza">
+                </div>
+                <div class="modal-info">
+                    <h3 class="modal-title" id="modalTitle"></h3>
+                    <div class="modal-price" id="modalPrice"></div>
+                    <p class="modal-description" id="modalDescription"></p>
+                    <div class="modal-ingredients">
+                        <h4>Ingredientes:</h4>
+                        <div class="ingredients-list" id="modalIngredients">
+                            <!-- Ingredientes serão adicionados aqui dinamicamente -->
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="add-to-cart-btn" id="modalAddToCart">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <h2>Autêntica Pizza Italiana</h2>
+            <p>Forno a lenha, ingredientes frescos e o verdadeiro sabor da Itália</p>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="cardapio">
+        <div class="container">
+            <div class="section-title">
+                <h2>Especialidades da Casa</h2>
+            </div>
+            <div class="menu-vertical">
+                <!-- Produto 1 - Margherita -->
+                <div class="menu-item-vertical" id="produto1" data-product-id="1">
+                    <div class="menu-item-image">
+                        <img src="img/PizzaMarguerita.jpg" alt="Pizza Margherita">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="item-header">
+                            <h3 class="item-title" id="nomeProduto1">Margherita</h3>
+                            <p class="item-description">Massa fina e crocante, molho de tomate italiano, mussarela de búfala fresca, manjericão e azeite extra virgem. A clássica pizza italiana em sua forma mais autêntica.</p>
+                        </div>
+                        <div class="item-footer">
+                            <p class="item-price" id="precoProduto1">R$ 42,90</p>
+                            <span class="item-status in-stock" id="statusProduto1">Em Estoque</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto 2 - Pepperoni -->
+                <div class="menu-item-vertical" id="produto2" data-product-id="2">
+                    <div class="menu-item-image">
+                        <img src="img/Pepperoni.jpg" alt="Pizza Pepperoni">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="item-header">
+                            <h3 class="item-title" id="nomeProduto2">Pepperoni</h3>
+                            <p class="item-description">Massa tradicional, molho de tomate caseiro, pepperoni italiano, mussarela especial e orégano. Perfeita para quem ama sabores intensos e marcantes.</p>
+                        </div>
+                        <div class="item-footer">
+                            <p class="item-price" id="precoProduto2">R$ 48,50</p>
+                            <span class="item-status in-stock" id="statusProduto2">Em Estoque</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Produto 3 - Quatro Queijos -->
+                <div class="menu-item-vertical" id="produto3" data-product-id="3">
+                    <div class="menu-item-image">
+                        <img src="img/Pizza-Quatro-Queijos.jpg" alt="Pizza Quatro Queijos">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="item-header">
+                            <h3 class="item-title" id="nomeProduto3">Quatro Queijos</h3>
+                            <p class="item-description">Massa fina, molho branco especial, mussarela, gorgonzola, parmesão e provolone. Uma harmonização perfeita de queijos selecionados.</p>
+                        </div>
+                        <div class="item-footer">
+                            <p class="item-price" id="precoProduto3">R$ 52,90</p>
+                            <span class="item-status in-stock" id="statusProduto3">Em Estoque</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Avaliações -->
+    <section class="reviews-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Avaliações dos Clientes</h2>
+            </div>
+            <div class="reviews-container">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">M</div>
+                        <div class="review-info">
+                            <h4>Maria Silva</h4>
+                            <div class="review-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="review-text">"A melhor pizza que já comi! A massa é perfeita e os ingredientes são de altíssima qualidade. Recomendo a Margherita!"</p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">J</div>
+                        <div class="review-info">
+                            <h4>João Santos</h4>
+                            <div class="review-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="review-text">"Ambiente acolhedor e pizzas deliciosas. A Pepperoni é incrível, com um sabor autêntico que lembra a Itália."</p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">A</div>
+                        <div class="review-info">
+                            <h4>Ana Costa</h4>
+                            <div class="review-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="review-text">"A Quatro Queijos é divina! A combinação de queijos é perfeita e a massa no ponto certo. Voltarei com certeza!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NOVA SEÇÃO DE PROMOÇÕES -->
+    <section class="promo-section" id="promocoes">
+        <div class="container">
+            <div class="promo-content">
+                <h2 class="promo-title">🍕 Promozione Speciale! 🍕</h2>
+                <p class="promo-subtitle">Ofertas especiais em pizzas selecionadas. Sabores incríveis com descontos exclusivos!</p>
+                
+                <div class="promo-grid">
+                    <!-- Promo 1 - Margherita Classica -->
+                    <div class="promo-card">
+                        <div class="promo-icon"><img class="imagemPromoção" src="img/PizzaMarguerita.jpg" alt="Margherita Classica"></div>
+                        <h3>Margherita Classica</h3>
+                        <p>Massa fina, molho de tomate italiano, mussarela fresca e manjericão</p>
+                        <div class="promo-price">R$ 39,90</div>
+                        <button class="promo-btn" data-product-id="4">Pedir Agora</button>
+                    </div>
+                    
+                    <!-- Promo 2 - Pepperoni Supreme -->
+                    <div class="promo-card">
+                        <div class="promo-icon"><img class="imagemPromoção" src="img/PepperoniSupreme.jpg" alt="Pepperoni Supreme"></div>
+                        <h3>Pepperoni Supreme</h3>
+                        <p>Pepperoni italiano, mussarela especial, orégano e molho caseiro</p>
+                        <div class="promo-price">R$ 45,50</div>
+                        <button class="promo-btn" data-product-id="5">Pedir Agora</button>
+                    </div>
+                    
+                    <!-- Promo 3 - Calabresa Acebolada -->
+                    <div class="promo-card">
+                        <div class="promo-icon"><img class="imagemPromoção" src="img/CalabresaAcebolada.jpg" alt="Calabresa Acebolada"></div>
+                        <h3>Calabresa Acebolada</h3>
+                        <p>Calabresa especial, cebola roxa, mussarela e azeitonas</p>
+                        <div class="promo-price">R$ 43,90</div>
+                        <button class="promo-btn" data-product-id="6">Pedir Agora</button>
+                    </div>
+                    
+                    <!-- Promo 4 - Frango Catupiry -->
+                    <div class="promo-card">
+                        <div class="promo-icon"><img class="imagemPromoção" src="img/frangoCatupiry.jpg" alt="Frango Catupiry"></div>
+                        <h3>Frango Catupiry</h3>
+                        <p>Frango desfiado, catupiry cremoso, milho e mussarela</p>
+                        <div class="promo-price">R$ 47,90</div>
+                        <button class="promo-btn" data-product-id="7">Pedir Agora</button>
+                    </div>
+
+                    <!-- Promo 5 - Basca -->
+                    <div class="promo-card">
+                        <div class="promo-icon"><img class="imagemPromoção" src="img/Basca.jpeg" alt="Basca"></div>
+                        <h3>Basca</h3>
+                        <p>Sabor especial da casa com ingredientes selecionados</p>
+                        <div class="promo-price">R$ 47,90</div>
+                        <button class="promo-btn" data-product-id="8">Pedir Agora</button>
+                    </div>
+
+                    <!-- Promo 6 - Alho-Poró com Bacon -->
+                    <div class="promo-card">
+                        <div class="promo-icon"><img class="imagemPromoção" src="img/Alho-Poró com Bacon.jpg" alt="Alho-Poró com Bacon"></div>
+                        <h3>Alho-Poró com Bacon</h3>
+                        <p>Alho-poró caramelizado, bacon crocante e queijos especiais</p>
+                        <div class="promo-price">R$ 47,90</div>
+                        <button class="promo-btn" data-product-id="9">Pedir Agora</button>
+                    </div>
+                </div>
+                
+                <div class="unidades-container">
+                    <h3 class="unidades-title">Unidades Participantes</h3>
+                    <div class="unidades-grid">
+                        <div class="unidade-card" data-location="Asa Sul, Bloco B, 413, Brasília">
+                            <div class="unidade-nome">Asa Sul</div>
+                            <div class="unidade-normal">Bloco B, 413</div>
+                            <div class="map-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        </div>
+                        <div class="unidade-card" data-location="Asa Norte, Brasília" data-promo="true">
+                            <div class="unidade-nome">Asa Norte</div>
+                            <div class="unidade-promo">Novembro</div>
+                            <div>R$ 30,00 OFF</div>
+                            <div class="map-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        </div>
+                        <div class="unidade-card" data-location="Guará, QE 24 Bloco B, Brasília">
+                            <div class="unidade-nome">Guará</div>
+                            <div class="unidade-normal">Qe 24 Bloco B</div>
+                            <div class="map-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        </div>
+                        <div class="unidade-card" data-location="Lago Sul, Brasília" data-promo="true">
+                            <div class="unidade-nome">Lago Sul</div>
+                            <div class="unidade-promo">Novembro</div>
+                            <div>R$ 30,00 OFF</div>
+                            <div class="map-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        </div>
+                        <div class="unidade-card" data-location="Núcleo Bandeirante, Avenida Principal, Brasília">
+                            <div class="unidade-nome">Nucleo Bandeirante</div>
+                            <div class="unidade-normal">Av. Principal</div>
+                            <div class="map-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        </div>
+                        <div class="unidade-card" data-location="Águas Claras, Brasília" data-promo="true">
+                            <div class="unidade-nome">Águas Claras</div>
+                            <div class="unidade-promo">Novembro</div>
+                            <div>R$ 30,00 OFF</div>
+                            <div class="map-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        </div>
+                        <div class="unidade-card" data-location="Taguatinga, QND 16 Lote C, Brasília">
+                            <div class="unidade-nome">Taguatínga</div>
+                            <div class="unidade-normal">Qnd 16 lote C</div>
+                            <div class="map-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        </div>
+                        <div class="unidade-card" data-location="Sobradinho, Brasília" data-promo="true">
+                            <div class="unidade-nome">Sobradinho</div>
+                            <div class="unidade-promo">Novembro</div>
+                            <div>R$ 30,00 OFF</div>
+                            <div class="map-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        </div>
+                        <div class="unidade-card" data-location="Ceilândia, Brasília" data-promo="true">
+                            <div class="unidade-nome">Celiândia</div>
+                            <div class="unidade-promo">Novembro</div>
+                            <div>R$ 30,00 OFF</div>
+                            <div class="map-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        </div>
+                        <div class="unidade-card" data-location="Gama, Brasília" data-promo="true">
+                            <div class="unidade-nome">Gama</div>
+                            <div class="unidade-promo">Novembro</div>
+                            <div>R$ 30,00 OFF</div>
+                            <div class="map-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="sobre">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>La Nostra Storia</h2>
+                    <p>Há mais de 20 anos, a La Bella Pizza traz para o Brasil a autêntica pizza italiana, preparada em forno a lenha com ingredientes importados da Itália e receitas tradicionais da nonna.</p>
+                    <p>Nossa missão é proporcionar uma experiência gastronômica única, onde cada pizza conta uma história e cada sabor transporta nossos clientes para as encantadoras ruas da Itália.</p>
+                    <p>Venha nos visitar e descubra por que somos referência em pizza artesanal na região!</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Forno a lenha">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contato">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>La Bella Pizza</h3>
+                    <p style="color: #BDC3C7; margin-bottom: 20px;">Autêntica pizza italiana em um ambiente acolhedor e familiar. Tradição e sabor em cada fatia.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+                        <a href="https://web.whatsapp.com/"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.tripadvisor.com.br/"><i class="fab fa-tripadvisor"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Horários</h3>
+                    <ul>
+                        <li><i class="far fa-clock"></i> Terça a Quinta: 18h às 23h</li>
+                        <li><i class="far fa-clock"></i> Sexta e Sábado: 18h às 00h</li>
+                        <li><i class="far fa-clock"></i> Domingo: 18h às 22h</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contatto</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Asa Sul, 413 - Brasília</li>
+                        <li><i class="fas fa-phone"></i> (61) 5555-6789</li>
+                        <li><i class="fas fa-envelope"></i> ciao@labellapizza.com.br</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 La Bella Pizza - Tutti i diritti riservati | Buon Appetito! 🍕</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
