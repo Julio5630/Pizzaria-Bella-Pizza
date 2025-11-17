@@ -1224,6 +1224,7 @@ footer::before {
     transition: all 0.3s ease;
     color: white;
     text-decoration: none;
+    font-size: 200%;
 }
 
 .social-icons a:hover {
